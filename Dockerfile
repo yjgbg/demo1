@@ -1,4 +1,4 @@
-FROM docker.pkg.github.com/yjgbg/builder/master:356192827 as builder
+FROM docker.pkg.github.com/yjgbg/builder/356303389:master as builder
 COPY ./ /target/
 WORKDIR /target/
 RUN flutter create .
