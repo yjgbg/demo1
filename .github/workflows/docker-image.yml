@@ -1,0 +1,19 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login Github Package
+        run: docker login docker.pkg.github.com -u yjgbg -p ${{ secrets.PACKAGE_TOKEN }}
+      - name: Build the Docker image
+        run: docker build -t docker.pkg.github.com/${GITHUB_REPOSITORY}/master:${GITHUB_RUN_ID} .
+      - name: Push the Docker image
+        run: docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/master:${GITHUB_RUN_ID}
