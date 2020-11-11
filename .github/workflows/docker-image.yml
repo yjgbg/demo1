@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Login Github Package
-        run: docker login docker.pkg.github.com -u yjgbg -p ${{ secrets.PACKAGE_TOKEN }}
+        run: docker login docker.pkg.github.com -u yjgbg -p ${GITHUB_TOKEN}
       - name: Build the Docker image
         run: docker build -t docker.pkg.github.com/${GITHUB_REPOSITORY}/${GITHUB_RUN_ID}:master .
       - name: Push the Docker image
