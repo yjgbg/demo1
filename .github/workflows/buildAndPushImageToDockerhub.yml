@@ -1,0 +1,20 @@
+name: Build and push image to dockerhub
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 登录dockerhub
+        run: docker login -u ${{ secrets.DOCKERHUB_USER }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: 构建镜像，tag为${GITHUB_REF##*/}
+        run: docker build -t ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:${GITHUB_REF##*/} .
+      - name: 添加tag:latest
+        run: docker tag ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:${GITHUB_REF##*/} ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}
+      - name: 推送镜像
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}:${GITHUB_REF##*/}
+          docker push ${{ secrets.DOCKERHUB_USER }}/${{ github.event.repository.name }}
